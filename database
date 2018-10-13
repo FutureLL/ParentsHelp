@@ -1,0 +1,139 @@
+-- 创建数据库
+CREATE DATABASE PH DEFAULT CHARSET utf8 COLLATE utf8_general_ci;
+-- 使用表
+USE PH;
+
+-- 创建用户表
+CREATE TABLE USER(
+		-- 用户id
+		id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+		-- 用户名username
+		username VARCHAR(10) NOT NULL UNIQUE KEY,
+		-- 用户密码
+		passwd VARCHAR(18) NOT NULL,
+		-- 手机号
+		phone INT NOT NULL UNIQUE KEY
+);
+
+-- 创建用户
+INSERT INTO USER(username,passwd,phone) VALUE('FutureLL','123456',13186102535);
+INSERT INTO goodscar(userid,goodsid,quantity) VALUE(1,1,2);
+
+-- 创建购物车
+CREATE TABLE goodscar(
+	-- 绑定用户id
+	userid INT NOT NULL,
+	-- 绑定商品id
+	goodsid INT NOT NULL,
+	-- 购买数量
+	quantity INT NOT NULL
+);
+
+-- 将购物车与用户绑定
+ALTER TABLE goodscar ADD FOREIGN KEY fk_goodscar_USER(userid) REFERENCES USER(id);
+-- 将购物车与商品绑定
+ALTER TABLE goodscar ADD FOREIGN KEY fk_goodscar_warehouse(goodsid) REFERENCES warehouse(id);
+
+-- 创建订单表
+CREATE TABLE orderform(
+	-- 绑定用户id
+	userid INT NOT NULL,
+	-- 绑定商品id
+	goodsid INT NOT NULL,
+	-- 购买数量
+	quantity INT NOT NULL
+);
+-- 将订单表与用户绑定
+ALTER TABLE orderform ADD FOREIGN KEY fk_orderform_USER(userid) REFERENCES USER(id);
+-- 将订单表与商品绑定
+ALTER TABLE orderform ADD FOREIGN KEY fk_orderform_warehouse(goodsid) REFERENCES warehouse(id);
+
+-- 仓库创建
+CREATE TABLE warehouse(
+			-- goodid
+			id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+			-- goodname 可以重复
+			goodname VARCHAR(10) NOT NULL,
+			-- goodprice
+			goodprice INT NOT NULL,
+			-- factory生产厂商
+			factory VARCHAR(10) NOT NULL,
+			-- 大分类school
+			school VARCHAR(10) NOT NULL,
+			-- 小分类class
+			class VARCHAR(10) NOT NULL,
+			-- 图片 pic
+			pic VARCHAR(20) NOT NULL,
+			-- 型号 modle
+			modle VARCHAR(20) NOT NULL,
+			-- 剩余数量count
+			COUNT INT NOT NULL
+ );
+
+-- 商品的大分类表
+CREATE TABLE school(
+	NAME VARCHAR(10) NOT NULL PRIMARY KEY
+);
+
+-- 添加数据
+INSERT INTO school(NAME) VALUE('家用电器');
+INSERT INTO school(NAME) VALUE('日常百货');
+INSERT INTO school(NAME) VALUE('美味食品');
+
+-- 给仓库添加商品大分类的外键
+ALTER TABLE warehouse ADD FOREIGN KEY fk_warehouse_school(school) REFERENCES school(NAME);
+
+-- 商品的小分类
+CREATE TABLE class(
+	NAME VARCHAR(10) NOT NULL PRIMARY KEY
+);
+
+-- 添加数据
+INSERT INTO class(NAME) VALUE('牙膏');
+INSERT INTO class(NAME) VALUE('洗发水');
+INSERT INTO class(NAME) VALUE('毛巾');
+INSERT INTO class(NAME) VALUE('板凳');
+INSERT INTO class(NAME) VALUE('厨房用品');
+INSERT INTO class(NAME) VALUE('地毯');
+INSERT INTO class(NAME) VALUE('书包');
+INSERT INTO class(NAME) VALUE('拖鞋');
+INSERT INTO class(NAME) VALUE('收纳盒');
+INSERT INTO class(NAME) VALUE('垃圾处理');
+INSERT INTO class(NAME) VALUE('清洁刷');
+-- 给仓库添加商品小分类的外键
+ALTER TABLE warehouse ADD FOREIGN KEY fk_warehouse_class(class) REFERENCES class(NAME);
+
+
+-- 添加家电数据
+INSERT INTO warehouse(goodname,goodprice,factory,school,class,pic,modle,COUNT)
+		VALUE('立式空调',3000,'格力','家用电器','空调','10101.jpg','型号1',1000);
+INSERT INTO warehouse(goodname,goodprice,factory,school,class,pic,modle,COUNT)
+		VALUE('挂式空调',3500,'美的','家用电器','空调','10103.jpg','型号8',900);
+INSERT INTO warehouse(goodname,goodprice,factory,school,class,pic,modle,COUNT)
+		VALUE('二门冰箱',4500,'美的','家用电器','冰箱','10102.jpg','型号4',950);
+INSERT INTO warehouse(goodname,goodprice,factory,school,class,pic,modle,COUNT)
+		VALUE('三门冰箱',4200,'海尔','家用电器','冰箱','10104.jpg','型号2',350);
+
+-- 添加生活用品数据
+INSERT INTO warehouse(goodname,goodprice,factory,school,class,pic,modle,COUNT)
+		VALUE('中华牙膏',4,'中华','日常百货','牙膏','10105.jpg','薄荷',1000);
+INSERT INTO warehouse(goodname,goodprice,factory,school,class,pic,modle,COUNT)
+		VALUE('纳爱斯牙膏',5,'纳爱斯','日常百货','牙膏','10106.jpg','水果',900);
+INSERT INTO warehouse(goodname,goodprice,factory,school,class,pic,modle,COUNT)
+		VALUE('沙宣洗发水',45,'沙宣','日常百货','洗发水','10107.jpg','去屑',950);
+INSERT INTO warehouse(goodname,goodprice,factory,school,class,pic,modle,COUNT)
+		VALUE('海飞丝洗发水',38,'海飞丝','日常百货','洗发水','10108.jpg','柔顺',350);
+INSERT INTO warehouse(goodname,goodprice,factory,school,class,pic,modle,COUNT)
+		VALUE('塑料板凳',38,'我爱板凳牌','日常百货','板凳','101089.jpg','舒适',790);
+INSERT INTO warehouse(goodname,goodprice,factory,school,class,pic,modle,COUNT)
+		VALUE('防切助手',98,'我爱切菜牌','日常百货','厨房用品','../img/厨房用品3.PNG','安全',990);
+INSERT INTO warehouse(goodname,goodprice,factory,school,class,pic,modle,COUNT)
+		VALUE('书包',298,'老人头','日常百货','书包','../img/书包3.PNG','储物',120);
+INSERT INTO warehouse(goodname,goodprice,factory,school,class,pic,modle,COUNT)
+		VALUE('卷毛刷',18,'淘宝出品','日常百货','清洁刷','../img/卷毛刷.PNG','清理',220);
+INSERT INTO warehouse(goodname,goodprice,factory,school,class,pic,modle,COUNT)
+		VALUE('浴室小地毯',48,'淘宝出品','日常百货','地毯','../img/地毯.PNG','方便',250);
+INSERT INTO warehouse(goodname,goodprice,factory,school,class,pic,modle,COUNT)
+		VALUE('室内拖鞋',58,'淘宝出品','日常百货','拖鞋','../img/拖鞋.PNG','舒适',750);
+INSERT INTO warehouse(goodname,goodprice,factory,school,class,pic,modle,COUNT)
+		VALUE('袜子收纳盒',68,'淘宝出品','日常百货','收纳盒','../img/袜子收纳盒.PNG','收纳',750);
