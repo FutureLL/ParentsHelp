@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE-edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>生活百货</title>
+
+    <link rel="stylesheet" type="text/css" href="../bootstrap-3.3.7-dist/css/bootstrap.css">
+    <script src="../js/vue.js"></script>
+    <script src="../js/jquery.js"></script>
+    <script src="../js/axios.min.js"></script>
+    <script src="../js/jquery.min.js"></script>
+    <script src="../bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <!--开头菜单栏-->
+    <nav class="navbar navbar-default navbar-static-top" style="background-color: #806880;">
+        <div class="container">
+            <div class="navbar-header">
+                <a href="#" class="navbar-brand" style="color: white;">启动集团</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li>
+                    <a href="#" style="color: white;">主页</a>
+                </li>
+                <li>
+                    <a href="#" style="color: white;">生活缴费</a>
+                </li>
+                <li>
+                    <a href="#" style="color: white;">家政服务</a>
+                </li>
+                <li>
+                    <a href="#" style="color: white;">品质生活</a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a class="btn btn-default" data-toggle="dropdown">个人中心
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="#">个人中心</a>
+                        </li>
+                        <li>
+                            <a href="#">购物车</a>
+                        </li>
+                        <li>
+                            <a href="#">全部订单</a>
+                        </li>
+                        <li>
+                            <a href="#">账号设置</a>
+                        </li>
+                        <li>
+                            <a href="#">反馈</a>
+                        </li>
+                        <li>
+                            <a href="#">帮助</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">退出登录</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div id="lifestyle" class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <!--首页动画以及搜索，购物车，二维码-->
+                <img src="../img/timg.gif" style="width: 100%; height: 300px">
+                <nav class="navbar navbar-default navbar-static-top">
+                    <form class="navbar-form navbar-left">
+                        <div class="form-group">
+                            <label>　　　　　搜索商品　</label>
+                            <input type="text" class="form-control" placeholder="请输入商品名" size="50px" v-model="classes"/>
+                        </div>
+                        <button type="button" class="btn btn-primary" v-on:click="search()">搜索</button>
+                        　　　　　
+                        <img src="../img/gouwuche.PNG" style="width: 120px;height: 40px;" data-toggle="dropdown"/>
+                        <ul class="dropdown-menu" style="right: 300px;">
+                            <!--这里遍历集合，将自己选进购物车的物品显示出来-->
+                            <li>
+                                <a href="#">商品1</a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="#">商品2</a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="#">商品3</a>
+                            </li>
+                        </ul>
+                        <div style="float: left;">
+                            <img src="../img/saoma.PNG" style="width: 120px;height: 35px;" data-toggle="dropdown"/>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <img src="../img/erweima.PNG">
+                                </li>
+                            </ul>
+                        </div>
+                    </form>
+                </nav>
+            </div>
+
+            <!--通过数据库的内容将数据库中的物品展示出来-->
+            <div v-for="item in goodslist">
+                <div class="col-md-3">
+                    <img :src="item.pic" width="150" height="200px">
+                    <p align="left">{{item.goodname}}</p>
+                    <p align="left">
+                        {{item.goodprice}}￥　　　
+                        <button type="button" v-on:click="xiangxi(item)" data-toggle="modal" data-target="#myModal" data-backdrop="static" style="height: 30px; width: 80px; background: #806880; color: white;">
+                            详细信息
+                        </button>
+                        <div class="modal " id="myModal">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                   <div class="modal-header">
+                                        <img :src="goods.pic" width="300px" height="300px">
+                                        <!--图片放大功能-->
+                                        <!--<div style="position:absolute;display:none" id="imgss">-->
+                                            <!--<img :src="item.pic" width="500px" height="500px" />-->
+                                        <!--</div>-->
+
+                                        <!--关闭按钮-->
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>　　　生产厂商：{{goods.factory}}</p>
+                                        <p>　　　商品型号：{{goods.modle}}</p>
+                                        <p>　　　商品剩余数量：{{goods.count}}</p>
+                                        <p>　　　所属种类：{{goods.school}}</p>
+                                        <button type="button" class="btn btn-block" style="background-color: #806880; color: white;">加入购物车</button>
+                                    </div>
+                                    <div class="modal-footer" style="text-align: center">
+                                        <button type="button" class="btn btn-danger">分享链接</button>
+                                        <a href="goodspay.html"><button type="button" class="btn btn-success">购买物品</button></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+    var vue=new Vue({
+        el:"#lifestyle",
+        data:{
+            goodslist:[],
+            goods:{
+                pic:"",
+                factory:"",
+                modle:"",
+                count:"",
+                school:""
+            },
+            classes:"",
+            wareHouseListurl:"/ParentsHelp/llhtml/wareHouseList.do",
+            searchurl:"/ParentsHelp/llhtml/search.do"
+        },
+        //详细信息显示
+        methods:{
+            xiangxi:function(item) {
+                vue.goods.pic=item.pic;
+                vue.goods.factory=item.factory;
+                vue.goods.modle=item.modle;
+                vue.goods.count=item.count;
+                vue.goods.school=item.school;
+            },
+            wareHouseList:function () {
+                axios.post(this.wareHouseListurl).then(function (value) {
+                    vue.goodslist=[];
+                    for(var i=0;i<value.data.length;i++){
+                        vue.goodslist.push(value.data[i]);
+                    }
+                }).catch(function (reason) {
+                    console.log(reason);
+                    alert("数据加载出错");
+                });
+            },
+            //搜索你需要的物品
+            search:function () {
+                // axios.post(this.searchurl,this.classes).then(function (value)
+                console.log(this.searchurl+"?classes="+this.classes);
+                axios.post(this.searchurl+"?classes="+this.classes).then(function (value) {
+                    console.log(value);
+                    vue.goodslist=[];
+                    for(var i=0;i<value.data.length;i++){
+                        vue.goodslist.push(value.data[i]);
+                    }
+                }).catch(function (reason) {
+                    console.log(reason);
+                    alert("搜索数据出现问题");
+                });
+            }
+        },
+        mounted:function () {
+            this.wareHouseList();
+        }
+    });
+
+
+
+    // 图片放大
+    // jQuery(document).ready(function() {
+    //     $(".imgs").mouseover(function(e) {
+    //         $(e.srcElement).next()
+    //             .show()
+    //             .css({
+    //                 "top": (e.clientY + 5) + "px",
+    //                 "left": (e.clientX + 5) + "px"
+    //             });
+    //     }).mousemove(function(e) {
+    //         $(e.srcElement).next()
+    //             .show()
+    //             .css({
+    //                 "top": (e.clientY + 5) + "px",
+    //                 "left": (e.clientX + 5) + "px"
+    //             });
+    //     }).mouseout(function(e) {
+    //         //如果被选的元素已被显示，则隐藏该元素。
+    //         $(".imgss").hide();
+    //     })
+    // });
+</script>
+</html>

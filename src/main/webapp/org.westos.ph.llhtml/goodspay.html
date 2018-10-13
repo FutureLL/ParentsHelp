@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE-edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>在线支付</title>
+
+    <link rel="stylesheet" type="text/css" href="../bootstrap-3.3.7-dist/css/bootstrap.css">
+    <script src="../js/vue.js"></script>
+    <script src="../js/jquery.js"></script>
+    <script src="../js/axios.min.js"></script>
+    <script src="../js/jquery.min.js"></script>
+    <script src="../bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <img src="../img/paygood.PNG" style="width:100%; height:726px">
+    <div id="pay" class="container">
+        <div class="row">
+            <div class="col-md-12">
+                {{goods.pic}}
+                {{goods.factory}}
+                {{goods.count}}
+            </div>
+        </div>
+    </div>
+
+</body>
+<script type="text/javascript">
+    var vue=new Vue({
+       el:"#pay",
+       data:{
+           goods:{
+               pic:"",
+               factory:"",
+               count:""
+           },
+           paygoodurl:"/ParentsHelp/llhtml/search.do"
+       },
+       methods:{
+            pay:function () {
+                axios.post(data.paygoodurl+"?classes="${request.classes}).then(function (value) {
+                    console.log(value);
+                    vue.goods.pic=value.data.pic;
+                    vue.goods.factory=value.data.factory;
+                    vue.goods.count=value.data.count;
+                });
+            }
+       }
+    });
+</script>
+</html>
